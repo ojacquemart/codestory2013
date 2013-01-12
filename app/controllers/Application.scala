@@ -17,8 +17,8 @@ object Application extends Controller {
   }
 
    def enonce(index: Int) = Action { request =>
-    Logger.info(request.body)
-     Ok
+    println(request.body)
+    Ok
   }
 
 }
