@@ -5,10 +5,6 @@ import play.api.mvc._
 
 object Application extends Controller {
 
-  def debug() = Action {
-    Ok(views.html.index())
-  }
-
   def index(q: String) = Action {
     Logger.info("Query = " + q)
 
@@ -21,7 +17,7 @@ object Application extends Controller {
   }
 
    def enonce(index: Int) = Action { request =>
-    println(request.body)
+    Logger.info(request.body)
      Ok
   }
 
