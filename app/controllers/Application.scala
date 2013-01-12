@@ -17,10 +17,12 @@ object Application extends Controller {
   }
 
    def enonce(index: Int) = Action { request =>
-    println(request.headers)
-    println(request.method)
-    println(request.queryString)
-    println(request.contentType)
+    println("Request = " + request)
+    println("Headers = " + request.headers)
+    println("Method = " + request.method)
+    println("QueryString = " + request.queryString)
+    println("ContentType = " + request.contentType)
+    println("AsFormUrlEncoded = " + request.body.asFormUrlEncoded)
     println("Enonce = " + request.body)
     Ok
   }
