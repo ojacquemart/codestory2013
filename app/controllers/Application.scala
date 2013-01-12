@@ -10,7 +10,7 @@ object Application extends Controller {
 
     q match {
       case "Quelle est ton adresse email" => Ok("o.jacquemart@gmail.com")
-      case "Es tu abonne a la mailing list(OUI/NON)" => Ok("NON")
+      case "Es tu abonne a la mailing list(OUI/NON)" => Ok("OUI")
       case _ => Ok("")
     }
   }
