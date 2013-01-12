@@ -14,11 +14,13 @@ object Application extends Controller {
       case "Es tu heureux de participer(OUI/NON)" => Ok("OUI")
       case "Es tu pret a recevoir une enonce au format markdown par http post(OUI/NON)" => Ok("OUI")
       case "Est ce que tu reponds toujours oui(OUI/NON)" => Ok("NON")
+      case "As tu bien recu le premier enonce(OUI/NON)" => Ok("NON")
       case _ => Ok("")
     }
   }
 
-   def enonce(index: Int) = Action {
+   def enonce(index: Int) = Action { request =>
+    Logger.info("Request = " + request)
     Ok("")
    }
 
