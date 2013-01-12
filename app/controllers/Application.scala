@@ -17,7 +17,7 @@ object Application extends Controller {
   }
 
    def enonce(index: Int) = Action { request =>
-    println(request)
+    println("Enonce = " + request.body)
     Ok
   }
 
