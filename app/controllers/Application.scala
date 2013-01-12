@@ -12,7 +12,7 @@ object Application extends Controller {
       case "Quelle est ton adresse email" => Ok("o.jacquemart@gmail.com")
       case "Es tu abonne a la mailing list(OUI/NON)" => Ok("OUI")
       case "Es tu heureux de participer(OUI/NON)" => Ok("OUI")
-      case "Es tu pret a recevoir une enonce au format markdown par http(OUI/NON)" => Ok("OUI")
+      case "Es tu pret a recevoir une enonce au format markdown par http post(OUI/NON)" => Ok("OUI")
       case _ => Ok("")
     }
   }
