@@ -18,4 +18,8 @@ object Application extends Controller {
     }
   }
 
+   def enonce(index: Int) = Action {
+    Ok("")
+   }
+
 }
