@@ -3,6 +3,10 @@ package controllers
 import play._
 import play.api.mvc._
 
+import play.api.libs.json._
+
+import scalaskel._
+
 object Application extends Controller {
 
   def index(q: String) = Action {
@@ -15,9 +19,14 @@ object Application extends Controller {
 
    def enonce(id: Int) = Action { request =>
     println("Body " + request.body)
+    println("Body asJson " + request.body.asJson)
     println("Headers = " + request.headers)
     println("Method = " + request.method)
     Created
+  }
+
+  def scalaskel(money: Int) = Action { request =>
+    Ok(Scalaskel.changeAsJson(money)).as("application/json")
   }
 
 }
