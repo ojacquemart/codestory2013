@@ -105,19 +105,16 @@ object Scalaskel {
       }
 
       val rest = money - change.value
+      if (change.cent.value == 7 && change.nb == 2) {
+        println("!!!" + rest)
+      }
       if (rest > 0) {
         val otherCombinations = combinationsBarQixBaz(rest, otherChanges)
-        if (otherCombinations.isEmpty) {
-          // No other possible changes, complete with foos.
-          List(List(change, getFoos(rest)))
-        } else {
-          // Map each possible bar with qix, baz and foos
-          otherCombinations.map(p => {
-            val restAfterNewChange = rest - p.value
-            if (restAfterNewChange > 0) List(change, p, getFoos(restAfterNewChange))
-            else List(change, p)
-          })
-        }
+        List(List(change, getFoos(rest))) ++ otherCombinations.map(p => {
+          val restAfterNewChange = rest - p.value
+          if (restAfterNewChange > 0) List(change, p, getFoos(restAfterNewChange))
+          else List(change, p)
+        })
       }
       else List()
     }
