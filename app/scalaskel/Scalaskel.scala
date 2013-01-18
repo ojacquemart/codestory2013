@@ -4,6 +4,50 @@ import play.api.libs.json._
 
 object Scalaskel {
 
+  trait TCent {
+    def currency: String
+    def value: Int
+    def nb: Int
+
+    override def toString = if (nb == 0) "" else "'%s' : %d".format(currency, nb)
+  }
+
+  case class Foo(nb: Int) extends TCent {
+    def currency = "foo"
+    def value = 1
+  }
+
+  case class Bar(nb: Int) extends TCent {
+    def currency = "bar"
+    def value = 7
+  }
+
+  case class Qix(nb: Int) extends TCent {
+    def currency = "qix"
+    def value = 11
+  }
+
+  case class Baz(nb: Int) extends TCent {
+    def currency = "baz"
+    def value = 21
+  }
+
+  case class Coin(foo: Foo, bar: Bar, qix: Qix, baz: Baz) {
+
+    override def toString = {
+      List(foo, bar, qix, baz).map(_.toString).filter(s => !s.isEmpty).mkString("{", ",", "}")
+    }
+  }
+
+  def listChangeToCoin(l: List[Change]): Coin = {
+    Coin(
+      Foo(l.find(_.cent.value == foo.value).getOrElse(Change(foo, 0)).nb),
+      Bar(l.find(_.cent.value == bar.value).getOrElse(Change(bar, 0)).nb),
+      Qix(l.find(_.cent.value == qix.value).getOrElse(Change(qix, 0)).nb),
+      Baz(l.find(_.cent.value == baz.value).getOrElse(Change(baz, 0)).nb)
+    )
+  }
+
   case class Cent(value: Int, currency: String)
 
   val foo = Cent(1, "foo")
@@ -22,7 +66,7 @@ object Scalaskel {
 
   def getFoos(nb: Int) = Change(foo, nb)
 
-  def changeAsJson(money: Int) = change(money).map(l => l.mkString("{",",", "}")).mkString("[", ",", "]")
+  def changeAsJson(money: Int) = change(money).map(listChangeToCoin(_)).mkString("[", ",", "]")
 
   def change(money: Int) = {
     def foosUntilMoney() = List(List(getFoos(money)))
