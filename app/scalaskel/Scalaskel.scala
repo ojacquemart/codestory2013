@@ -64,6 +64,7 @@ object Scalaskel {
     override def toString = "'%s': %d".format(cent.currency, nb)
   }
 
+
   def getFoos(nb: Int) = Change(foo, nb)
 
   def changeAsJson(money: Int) = change(money).map(listChangeToCoin(_)).mkString("[", ",", "]")
@@ -76,6 +77,8 @@ object Scalaskel {
     (foosUntilMoney() ++ barQixBazEqualsToMoney() ++ 
     	barQixBazWithFoosEqualsToMoney() ++ decomposeFooBarQixBaz(money)).toSet
   }
+
+  implicit def changeToInt(c: Change): Int = c.cent.value * c.nb
 
   def decomposeFooBarQixBaz(money: Int): List[List[Change]] = {
     def possibleChangesForCentByMoney(cent: Cent, money: Int): List[Change] = {
@@ -101,22 +104,17 @@ object Scalaskel {
         def maxFromChanges(changes: List[Change]) = if (changes.isEmpty) List() else List(changes.maxBy(_.nb))
 
         if (otherChanges.isEmpty) List()
-        else maxFromChanges(otherChanges.head.filter(p => p.value <= rest)) ++ combinationsBarQixBaz(rest, otherChanges.tail)
+        else otherChanges.head.filter(p => p.value <= rest) ++ combinationsBarQixBaz(rest, otherChanges.tail)
       }
 
-      val rest = money - change.value
-      if (change.cent.value == 7 && change.nb == 2) {
-        println("!!!" + rest)
-      }
-      if (rest > 0) {
+        val rest = money - change.value
         val otherCombinations = combinationsBarQixBaz(rest, otherChanges)
-        List(List(change, getFoos(rest))) ++ otherCombinations.map(p => {
+        val list = List(List(change, getFoos(rest))) ++ otherCombinations.map(p => {
           val restAfterNewChange = rest - p.value
           if (restAfterNewChange > 0) List(change, p, getFoos(restAfterNewChange))
           else List(change, p)
         })
-      }
-      else List()
+        list
     }
 
     possiblesChangeForFooQixBaz.flatMap(l => l.map(x => generate(money, x))).flatten
