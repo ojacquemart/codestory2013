@@ -28,7 +28,6 @@ object Application extends Controller {
   def scalaskel(money: Int) = Action { request =>
     val result = Scalaskel.changeAsJson(money)
     Logger.info("[money=%d, response=%s".format(money, result))
-    
     Ok(Scalaskel.changeAsJson(money)).as("application/json")
   }
 
