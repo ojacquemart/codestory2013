@@ -12,7 +12,7 @@ object QueryHandler {
 		val eqPattern = """[0-9+]+([+|*|-|/])+""".r
 	    eqPattern findFirstIn question match {
 	      case None => Question.answer(question)
-	      case _ => Equation.resolve(question).toString
+	      case _ 	=> Equation.resolve(question).toString
 	    }
   	}	
 
@@ -25,8 +25,7 @@ object Equation {
 	 */
 	def resolve(exp: String): String = {
 		val calc: Calculable  = new ExpressionBuilder(exp).build
-   		val result = calc.calculate
-   		format(result)
+   		format(calc.calculate)
   	}
 
   	def format(x: Double): String = {
@@ -39,9 +38,9 @@ object Equation {
 object Question {
 	
 	 def answer(question: String): String = question match {
-		case "Quelle+est+ton+adresse+email" => "o.jacquemart@gmail.com"
-		case "Est+ce+que+tu+reponds+toujours+oui(OUI/NON)" => "NON"
-		case _ => "OUI"
+		case "Quelle+est+ton+adresse+email" 				=> "o.jacquemart@gmail.com"
+		case "Est+ce+que+tu+reponds+toujours+oui(OUI/NON)" 	=> "NON"
+		case _ 												=> "OUI"
 	}
 
 }
