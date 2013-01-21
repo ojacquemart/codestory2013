@@ -6,28 +6,17 @@ import play.api.libs.json._
 
 trait Cent {
   val currency: String
-  var nb: Int
+  val nb: Int
 
   override def toString = if (nb == 0) "" else "'%s' : %d".format(currency, nb)
 }
 
-case class Foo(var nb: Int) extends Cent {
-  val currency = "foo"
-}
+case class Foo(nb: Int) extends Cent { val currency = "foo" }
+case class Bar(nb: Int) extends Cent { val currency = "bar" }
+case class Qix(nb: Int) extends Cent { val currency = "qix" }
+case class Baz(nb: Int) extends Cent { val currency = "baz" }
 
-case class Bar(var nb: Int) extends Cent {
-  val currency = "bar"
-}
-
-case class Qix(var nb: Int) extends Cent {
-  val currency = "qix"
-}
-
-case class Baz(var nb: Int) extends Cent {
-  val currency = "baz"
-}
-
-class Coin(var foo: Foo, var bar: Bar, var qix: Qix, var baz: Baz) {
+class Coin(foo: Foo, bar: Bar, qix: Qix, baz: Baz) {
   def this(nbFoo: Int, nbBar: Int, nbQix: Int, nbBaz: Int) = this(Foo(nbFoo), Bar(nbBar), Qix(nbQix), Baz(nbBaz))
 
   override def toString = {
@@ -36,7 +25,6 @@ class Coin(var foo: Foo, var bar: Bar, var qix: Qix, var baz: Baz) {
 }
 
 object Pieces extends Enumeration {
-
   val Foo = Value(1)
   val Bar = Value(7)
   val Qix = Value(11)
@@ -44,7 +32,6 @@ object Pieces extends Enumeration {
 }
 
 object Scalaskel {
-
   def changeAsJson(money: Int) = change(money).map(_.toString).mkString("[", ",", "]")
 
   def change(money: Int) = {
