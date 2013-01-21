@@ -24,17 +24,13 @@ object Equation {
 	 @see http://www.objecthunter.net/exp4j/apidocs/index.html
 	 */
 	def resolve(exp: String): String = {
-		val calc: Calculable  = new ExpressionBuilder(preFormat(exp)).build
-   		format(calc.calculate)
+		val calc: Calculable  = new ExpressionBuilder(prepareIn(exp)).build
+   		prepareOut(checkIfIntValue(calc.calculate))
   	}
 
-  	def preFormat(exp: String) = exp.replace(",", ".")
-
-  	def format(x: Double): String = {
-  		if (x.toInt == x) x.toInt.toString
-  		else x.toString.replace(".", ",")
-  	}
-
+  	def prepareIn(value: String) = value.replace(",", ".")
+  	def prepareOut(value: String) = value.replace(".", ",")
+  	def checkIfIntValue(x: Double): String = if (x.toInt == x) x.toInt.toString else x.toString
 }
 
 object Question {
