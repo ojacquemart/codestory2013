@@ -26,7 +26,7 @@ class QueryAnswersSpec extends Specification {
 	"respond to /?q=1+1" in {
 	  	val Some(result) = routeAndCall(FakeRequest(GET, "/?q=1+1"))
 		status(result) must equalTo(OK)
-	  	contentAsString(result) must equalTo("2.0")
+	  	contentAsString(result) must equalTo("2")
 	}
 
 	"respond to anything else" in {

@@ -8,10 +8,11 @@ import play.api.libs.json._
 import query._
 import scalaskel._
 
+
 object Application extends Controller {
 
   def index(q: String) = Action { request =>
-    Ok(QueryHandler.handle(request.rawQueryString))
+    Ok(QueryHandler.handle(request.rawQueryString.replace("q=", "")))
   }
 
    def enonce(id: Int) = Action { request =>
