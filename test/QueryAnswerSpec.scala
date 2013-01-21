@@ -41,6 +41,12 @@ class QueryAnswersSpec extends Specification {
 	  	contentAsString(result) must equalTo("1,5")
 	}
 
+	"respond to /?q=1,5*4" in {
+	  	val Some(result) = routeAndCall(FakeRequest(GET, "/?q=1,5*4"))
+		status(result) must equalTo(OK)
+	  	contentAsString(result) must equalTo("6")
+	}
+
 	"respond to anything else" in {
 	  	val Some(result) = routeAndCall(FakeRequest(GET, "/?q=happy?"))
 		status(result) must equalTo(OK)

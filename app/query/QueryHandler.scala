@@ -24,9 +24,11 @@ object Equation {
 	 @see http://www.objecthunter.net/exp4j/apidocs/index.html
 	 */
 	def resolve(exp: String): String = {
-		val calc: Calculable  = new ExpressionBuilder(exp).build
+		val calc: Calculable  = new ExpressionBuilder(preFormat(exp)).build
    		format(calc.calculate)
   	}
+
+  	def preFormat(exp: String) = exp.replace(",", ".")
 
   	def format(x: Double): String = {
   		if (x.toInt == x) x.toInt.toString
