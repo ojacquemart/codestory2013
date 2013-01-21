@@ -5,17 +5,13 @@ import play.api.mvc._
 
 import play.api.libs.json._
 
+import query._
 import scalaskel._
 
 object Application extends Controller {
 
-  def index(q: String) = Action {
-    q match {
-      case "Quelle est ton adresse email" => Ok("o.jacquemart@gmail.com")
-      case "Est ce que tu reponds toujours oui(OUI/NON)" => Ok("NON")
-      case "1+1" => "2"
-      case _ => Ok("OUI")
-    }
+  def index(q: String) = Action { request =>
+    Ok(QueryHandler.handle(request.rawQueryString))
   }
 
    def enonce(id: Int) = Action { request =>
