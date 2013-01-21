@@ -9,14 +9,10 @@ object QueryHandler {
 	def handle(question: String): String = {
 		Logger.info("question=[%s]".format(question))
 
-		val eqPattern = """(\d+)(.+)(\d+)""".r
+		val eqPattern = """[0-9+]+([+|*|-|/])+""".r
 	    eqPattern findFirstIn question match {
-	      case (Some(eqPattern(a, op, b))) => Equation.resolve(question).toString
-	      case _ => {
-	        question match {
-	          case _ => Question.answer(question)
-	        }
-	      }
+	      case None => Question.answer(question)
+	      case _ => Equation.resolve(question).toString
 	    }
   	}	
 
@@ -33,8 +29,11 @@ object Equation {
    		format(result)
   	}
 
-  	def format(x: Double): String = if (x.toInt == x) x.toInt.toString else x.toString
-  	
+  	def format(x: Double): String = {
+  		if (x.toInt == x) x.toInt.toString
+  		else x.toString.replace(".", ",")
+  	}
+
 }
 
 object Question {
