@@ -1,11 +1,8 @@
 package query
 
-import java.math._
-import java.text._
-
 import play.api._
 
-import de.congrace.exp4j._
+import groovy.lang._
 
 object QueryHandler {
 	
@@ -23,17 +20,15 @@ object QueryHandler {
 
 object Equation {
 
-	/**
-	 @see http://www.objecthunter.net/exp4j/apidocs/index.html
-	 */
 	def resolve(exp: String): String = {
-		val calc: Calculable  = new ExpressionBuilder(prepareIn(exp)).build
-   		prepareOut(new BigDecimal(calc.calculate).toString)
+		val calc: String = new GroovyShell().evaluate(prepareIn(exp)).toString
+   		prepareOut(calc)
   	}
 
   	def prepareIn(value: String) = value.replace(",", ".")
-  	def prepareOut(value: String) = value.replace(".", ",")
-  	def checkIfIntValue(x: Double): String = /*if (x.toLong == x) x.toLong.toString else*/ x.toString
+  	def prepareOut(value: String) = {
+  		value.replaceAll("""(\d+)(\.0+)""", "$1").replace(".", ",")
+  	}
 }
 
 object Question {
