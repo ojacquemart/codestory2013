@@ -1,5 +1,8 @@
 package query
 
+import java.math._
+import java.text._
+
 import play.api._
 
 import de.congrace.exp4j._
@@ -25,12 +28,12 @@ object Equation {
 	 */
 	def resolve(exp: String): String = {
 		val calc: Calculable  = new ExpressionBuilder(prepareIn(exp)).build
-   		prepareOut(checkIfIntValue(calc.calculate))
+   		prepareOut(new BigDecimal(calc.calculate).toString)
   	}
 
   	def prepareIn(value: String) = value.replace(",", ".")
   	def prepareOut(value: String) = value.replace(".", ",")
-  	def checkIfIntValue(x: Double): String = if (x.toInt == x) x.toInt.toString else x.toString
+  	def checkIfIntValue(x: Double): String = /*if (x.toLong == x) x.toLong.toString else*/ x.toString
 }
 
 object Question {

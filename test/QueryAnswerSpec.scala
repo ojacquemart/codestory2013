@@ -47,6 +47,12 @@ class QueryAnswersSpec extends Specification {
 	  	contentAsString(result) must equalTo("6")
 	}
 
+	"respond to /?((1,1+2)+3,14+4+(5+6+7)+(8+9+10)*4267387833344334647677634)/2*553344300034334349999000" in {
+	  	val Some(result) = routeAndCall(FakeRequest(GET, "/?q=((1,1+2)+3,14+4+(5+6+7)+(8+9+10)*4267387833344334647677634)/2*5533443000343343499990004"))
+		status(result) must equalTo(OK)
+	  	contentAsString(result) must equalTo("318780189038289007235256033541132189372519974699008")
+	}
+
 	"respond to anything else" in {
 	  	val Some(result) = routeAndCall(FakeRequest(GET, "/?q=happy?"))
 		status(result) must equalTo(OK)
