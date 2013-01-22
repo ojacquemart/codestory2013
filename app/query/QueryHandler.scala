@@ -36,7 +36,8 @@ object Question {
 	 def answer(question: String): String = question match {
 		case "Quelle+est+ton+adresse+email" 				=> "o.jacquemart@gmail.com"
 		case "Est+ce+que+tu+reponds+toujours+oui(OUI/NON)" 	=> "NON"
-		case _ 												=> "OUI"
+		case "As+tu+passe+une+bonne+nuit+malgre+les+bugs+de+l+etape+precedente(PAS_TOP/BOF/QUELS_BUGS)" => "QUELS_BUGS"
+		case _ => "OUI"
 	}
 
 }
