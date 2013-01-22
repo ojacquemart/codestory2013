@@ -9,7 +9,7 @@ object QueryHandler {
 	def handle(question: String): String = {
 		Logger.info("question=[%s]".format(question))
 
-		val eqPattern = """[0-9+]+([+|*|-|/])+""".r
+		val eqPattern = """([0-9])+""".r
 	    eqPattern findFirstIn question match {
 	      case None => Question.answer(question)
 	      case _ 	=> Equation.resolve(question).toString
