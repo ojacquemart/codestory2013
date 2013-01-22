@@ -29,4 +29,8 @@ object Application extends Controller {
     Ok(result).as("application/json")
   }
 
+  def jajascript() = Action { request =>
+    Ok
+  }
+
 }
