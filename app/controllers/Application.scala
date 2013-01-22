@@ -16,7 +16,7 @@ object Application extends Controller {
   }
 
    def enonce(id: Int) = Action { request =>
-    println("Body " + request.body)
+    println("Body " + request.body.toString)
     println("Body asJson " + request.body.asJson)
     println("Headers = " + request.headers)
     println("Method = " + request.method)
@@ -30,6 +30,7 @@ object Application extends Controller {
   }
 
   def jajascript() = Action { request =>
+    println(request.body)
     Ok
   }
 
