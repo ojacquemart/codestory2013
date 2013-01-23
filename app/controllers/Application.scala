@@ -36,16 +36,9 @@ object Application extends Controller {
 
   def jajascript() = Action { request =>
     println("Headers = " + request.headers)
-    println("As objects = " + request.body.as[List[JsObject]].map(_.as[Path]))
+     println("As objects = " + request.body)
+    //println("As objects = " + request.body.as[List[JsObject]].map(_.as[Path]))
     Ok
   }
-    /*println(request)
-    println(request.rawQueryString)
-    println(request.body)
-    println(request.body.asFormUrlEncoded)
-    println(request.body.asJson)
-    Ok
-
-  }*/
 
 }
