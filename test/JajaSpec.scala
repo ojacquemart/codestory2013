@@ -17,10 +17,15 @@ class JajaSpec extends Specification {
   		Json.toJson(result).toString must equalTo("""{"VOL":"MONAD42","DEPART":0,"DUREE":5,"PRIX":10}""")
   	}
 
-	"json reads single path" in {
+	 "json reads single path" in {
   		val json = """{ "VOL": "MONAD42", "DEPART": 0, "DUREE": 5, "PRIX": 10 }"""
-  		Json.parse(json).as[Path] must equalTo(new Path("MONAD42", 0, 5, 10, List()))
+  		Json.parse(json).as[Path] must equalTo(new Path("MONAD42", 0, 5, 10))
   	}
+
+    "json reads enonce with listte" in {
+      val json = """[{ "VOL": "MONAD42", "DEPART": 0, "DUREE": 5, "PRIX": 10 }, { "VOL": "META18", "DEPART": 3, "DUREE": 7, "PRIX": 14 }]"""
+      Json.parse(json).as[List[JsObject]].map(_.as[Path]) must equalTo(List(new Path("MONAD42", 0, 5, 10), new Path("META18", 3, 5, 14)))
+    }    
 
   	"json writes result" in {
   		val result = new JajaResult(18, List("MONAD42", "LEGACY01"))
@@ -33,8 +38,11 @@ class JajaSpec extends Specification {
   	}
 
     "be for default case" in {
-    	val planning = ""
-        JajaScript.optimize(planning) must equalTo("""{"gain" : 18, "path" : ["MONAD42","LEGACY01"] }""")
+    	val jsonPlanning = Json.parse("""[{ "VOL": "MONAD42", "DEPART": 0, "DUREE": 5, "PRIX": 10 },
+                         { "VOL": "META18", "DEPART": 3, "DUREE": 7, "PRIX": 14 },
+                         { "VOL": "LEGACY01", "DEPART": 5, "DUREE": 9, "PRIX": 8 },
+                        { "VOL": "YAGNI17", "DEPART": 5, "DUREE": 9, "PRIX": 7 }]""")
+      JajaScript.optimize(jsonPlanning) must equalTo("""{"gain" : 18, "path" : ["MONAD42","LEGACY01"}]""")
     }
 
   }

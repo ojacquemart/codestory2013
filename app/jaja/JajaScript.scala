@@ -2,16 +2,25 @@ package jaja
 
 import play.api.libs.json._
 
-case class Path(name: String, startAt: Int, duration: Int, price: Int, nexts: List[Path]) 
+case class Path(name: String, startAt: Int, duration: Int, price: Int, nexts: List[Path] = List()) {
+
+	override def equals(any: Any) = any match {
+		case other: Path => (name == other.name && startAt == other.startAt)
+		case _ => false
+	}
+
+	override def hashCode() = name.hashCode + startAt.hashCode
+}
+
 case class JajaResult(gain: Int, path: List[String])
 
+// Implicit JsonFormats
 object JajaFormats {
-
 
 	implicit object PathFormat extends Format[Path] {
 
 		def reads(json: JsValue): Path = new Path(
-				(json \ "VOL").as[String], (json \ "DEPART").as[Int], (json \ "DUREE").as[Int], (json \ "PRIX").as[Int], List())
+				(json \ "VOL").as[String], (json \ "DEPART").as[Int], (json \ "DUREE").as[Int], (json \ "PRIX").as[Int])
 
 		def writes(path: Path) : JsValue = {
 			JsObject(
@@ -38,7 +47,11 @@ object JajaFormats {
 
 object JajaScript {
 	
-	def optimize(planning: String): String = {
+	import jaja.JajaFormats._
+
+	def optimize(jsonPlanning: JsValue): String = {
+		val paths = jsonPlanning.as[List[JsObject]].map(_.as[Path])
+
 		""
 	}
 }

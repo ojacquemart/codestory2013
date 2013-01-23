@@ -5,8 +5,12 @@ import play.api.mvc._
 
 import play.api.libs.json._
 
+import com.codahale.jerkson.Json._
+
 import query._
 import scalaskel._
+import jaja._
+import jaja.JajaFormats._
 
 
 object Application extends Controller {
@@ -16,7 +20,8 @@ object Application extends Controller {
   }
 
    def enonce(id: Int) = Action { request =>
-    println("Body " + request.body.toString)
+    println("Request " + request)
+    println("Body " + request.body)
     println("Body asJson " + request.body.asJson)
     println("Headers = " + request.headers)
     println("Method = " + request.method)
@@ -29,9 +34,17 @@ object Application extends Controller {
     Ok(result).as("application/json")
   }
 
-  def jajascript() = Action { request =>
-    println(request.body)
+  def jajascript() = Action(parse.json) { request =>
+    println(request.body.as[List[JsObject]].map(_.as[Path]))
     Ok
   }
+    /*println(request)
+    println(request.rawQueryString)
+    println(request.body)
+    println(request.body.asFormUrlEncoded)
+    println(request.body.asJson)
+    Ok
+
+  }*/
 
 }
