@@ -19,8 +19,11 @@ object JajaFormats {
 
 	implicit object PathFormat extends Format[Path] {
 
-		def reads(json: JsValue): Path = new Path(
-				(json \ "VOL").as[String], (json \ "DEPART").as[Int], (json \ "DUREE").as[Int], (json \ "PRIX").as[Int])
+		def reads(json: JsValue): Path =
+			new Path((json \ "VOL").as[String],
+						(json \ "DEPART").as[Int],
+							(json \ "DUREE").as[Int],
+								(json \ "PRIX").as[Int])
 
 		def writes(path: Path) : JsValue = {
 			JsObject(

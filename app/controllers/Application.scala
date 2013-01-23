@@ -35,7 +35,8 @@ object Application extends Controller {
   }
 
   def jajascript() = Action(parse.json) { request =>
-    println(request.body.as[List[JsObject]].map(_.as[Path]))
+    println("Headers = " + request.headers)
+    println("As objects = " + request.body.as[List[JsObject]].map(_.as[Path]))
     Ok
   }
     /*println(request)
