@@ -75,6 +75,6 @@ class QueryAnswersSpec extends Specification {
 	  	val Some(result) = routeAndCall(FakeRequest(GET, "/?q=happy?"))
 		status(result) must equalTo(OK)
 	  	contentAsString(result) must equalTo("OUI")
-	}	
+	}
 
 }

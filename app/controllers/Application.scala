@@ -38,7 +38,7 @@ object Application extends Controller {
     println("Headers = " + request.headers)
      println("As objects = " + request.body)
     //println("As objects = " + request.body.as[List[JsObject]].map(_.as[Path]))
-    Ok
+    Ok.as("application/json")
   }
 
 }

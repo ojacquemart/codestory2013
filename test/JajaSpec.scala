@@ -12,8 +12,24 @@ class JajaSpec extends Specification {
 
   "The JajaSpec" should {
 
+    "receive POST data" in {
+      running(FakeApplication()) {
+        val json = """{"name": "new name", "description": "new description"}"""
+        val Some(result) = routeAndCall(
+          FakeRequest(
+            POST, 
+            "/jajascript/optimize",
+            FakeHeaders(Map("Content-Type" -> Seq("application/x-www-form-urlencoded"))), 
+            json
+          ) )
+
+        status(result) must equalTo(OK)
+        contentType(result) must beSome("application/json")
+      }
+    }     
+
   	"json writes single path" in {
-  		val result = new Path("MONAD42", 0, 5, 10, List())
+  		val result = new Path("MONAD42", 0, 5, 10)
   		Json.toJson(result).toString must equalTo("""{"VOL":"MONAD42","DEPART":0,"DUREE":5,"PRIX":10}""")
   	}
 
@@ -37,12 +53,12 @@ class JajaSpec extends Specification {
   		Json.parse(json).as[JajaResult] must equalTo(new JajaResult(18, List("MONAD42", "LEGACY01")))
   	}
 
-    "be for default case" in {
+    "be ok for default case" in {
     	val jsonPlanning = Json.parse("""[{ "VOL": "MONAD42", "DEPART": 0, "DUREE": 5, "PRIX": 10 },
                          { "VOL": "META18", "DEPART": 3, "DUREE": 7, "PRIX": 14 },
                          { "VOL": "LEGACY01", "DEPART": 5, "DUREE": 9, "PRIX": 8 },
                         { "VOL": "YAGNI17", "DEPART": 5, "DUREE": 9, "PRIX": 7 }]""")
-      JajaScript.optimize(jsonPlanning) must equalTo("""{"gain" : 18, "path" : ["MONAD42","LEGACY01"}]""")
+      JajaScript.optimize(jsonPlanning) must equalTo("""{"gain":18,"path":["MONAD42","LEGACY01"]}""")
     }
 
   }
