@@ -26,9 +26,7 @@ object Equation {
   	}
 
   	def prepareIn(value: String) = value.replace(",", ".")
-  	def prepareOut(value: String) = {
-  		value.replaceAll("""(\d+)(\.0+)""", "$1").replace(".", ",")
-  	}
+  	def prepareOut(value: String) = value.replaceAll("""^(\d+)(\.0+)$""", "$1").replace(".", ",")
 }
 
 object Question {
