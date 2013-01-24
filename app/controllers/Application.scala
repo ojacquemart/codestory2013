@@ -34,9 +34,12 @@ object Application extends Controller {
     Ok(result).as("application/json")
   }
 
-  def jajascript() = Action { request =>
+  def jajascript(optmize: String) = Action { request =>
+    println("Request " + request)
+    println("Body " + request.body)
+    println("Body asJson " + request.body.asJson)
     println("Headers = " + request.headers)
-     println("As objects = " + request.body)
+    println("Method = " + request.method)
     //println("As objects = " + request.body.as[List[JsObject]].map(_.as[Path]))
     Created("").as("application/json")
   }
