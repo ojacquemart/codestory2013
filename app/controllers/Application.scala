@@ -36,6 +36,7 @@ object Application extends Controller {
 
   def jajascript(optmize: String) = Action { request =>
     println("Request " + request)
+    println("Request queryString " + request.getQueryString)
     println("Body " + request.body)
     println("Body asJson " + request.body.asJson)
     println("Headers = " + request.headers)
