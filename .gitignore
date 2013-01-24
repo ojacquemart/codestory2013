@@ -6,7 +6,9 @@ tmp
 .history
 dist
 /.idea
+/.idea_moduless
 /*.iml
+codestory2013.iml
 /out
 /.idea_modules
 /.classpath
