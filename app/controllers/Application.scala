@@ -35,14 +35,19 @@ object Application extends Controller {
   }
 
   def jajascript(optmize: String) = Action { request =>
+    println("Body " + request.body)
     println("Request " + request)
     println("Request queryString " + request.queryString)
-    println("Body " + request.body)
     println("Body asJson " + request.body.asJson)
     println("Headers = " + request.headers)
     println("Method = " + request.method)
     //println("As objects = " + request.body.as[List[JsObject]].map(_.as[Path]))
-    Created("").as("application/json")
+    val jsonPlanning = Json.parse("""[{ "VOL": "MONAD42", "DEPART": 0, "DUREE": 5, "PRIX": 10 },
+                         { "VOL": "META18", "DEPART": 3, "DUREE": 7, "PRIX": 14 },
+                         { "VOL": "LEGACY01", "DEPART": 5, "DUREE": 9, "PRIX": 8 },
+                        { "VOL": "YAGNI17", "DEPART": 5, "DUREE": 9, "PRIX": 7 }]""")
+    val result = JajaScript.optimize(jsonPlanning)
+    Created(result).as("application/json")
   }
 
 }
