@@ -7,10 +7,14 @@ import play.api.libs.json._
 
 import com.codahale.jerkson.Json._
 
+import javax.servlet.http.HttpServletRequest
+
 import query._
 import scalaskel._
 import jaja._
 import jaja.JajaFormats._
+
+import org.apache.commons.io._
 
 
 object Application extends Controller {
@@ -34,9 +38,11 @@ object Application extends Controller {
     Ok(result).as("application/json")
   }
 
-  def jajascript() = Action { request =>
+  def jajascript() = Action(parse.tolerantText) { request =>
+    println(request.body)
+    println(request)
     println("Body " + request.body)
-    println("Request uri " + request.uri )
+    /*println("Request uri " + request.uri )
     println("Request accept " + request.accept )
     println("Request queryString " + request.queryString )
     println("Body as Text " + request.body.asText)
@@ -44,8 +50,9 @@ object Application extends Controller {
     println("Request asFormUrlEncoded " + request.body.asFormUrlEncoded)
     println("Request queryString " + request.queryString)
     println("Body asJson " + request.body.asJson)
-    println("Headers = " + request.headers)
-    Created(JajaScript.optimize(request.body.asText)).as("application/json")
+    println("Headers = " + request.headers)*/
+    Created("Oh shit").as("application/json")
+    //Created(JajaScript.optimize(request.body.asText)).as("application/json")
   }
 
 }
