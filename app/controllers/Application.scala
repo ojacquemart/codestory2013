@@ -34,14 +34,17 @@ object Application extends Controller {
 
   def scalaskel(money: Int) = Action { request =>
     val result = Scalaskel.changeAsJson(money)
-    Logger.info("[money=%d, response=%s".format(money, result))
+    println("[money=%d, response=%s".format(money, result))
     Ok(result).as("application/json")
   }
 
   def jajascript() = Action(parse.tolerantText) { request =>
     println("Body " + request.body)
     println("Headers = " + request.headers)
-    Created(JajaScript.optimize(Some(request.body))).as("application/json")
+
+    val result = JajaScript.optimize(Some(request.body))
+    println("Jaja = %s".format(result))
+    Created(result).as("application/json")
   }
 
 }

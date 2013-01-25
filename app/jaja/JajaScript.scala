@@ -89,13 +89,17 @@ object JajaScript {
 	}
 
 	def getJajaResult(mapPaths: List[(Path, List[Path])]): JajaResult = {
+		println(mapPaths)
 		val head = mapPaths.head._1
-		val pathsWithPrices = mapPaths.filter(!_._2.isEmpty)
-		if (pathsWithPrices.isEmpty) {
-			new JajaResult(head.price, List(head.name))
-		} else {
-			val pathMaxPrice = pathsWithPrices.maxBy(p => p._2.maxBy(_.price))._2.head
+		mapPaths.filter(!_._2.isEmpty) match {
+			case Nil =>  {
+				val maxByPrice: Path = mapPaths.maxBy(p => p._1.price)._1
+				new JajaResult(maxByPrice.price, List(maxByPrice.name))
+			}
+			case list => {
+			val pathMaxPrice = list.maxBy(p => p._2.maxBy(_.price))._2.head
 			new JajaResult(head.price + pathMaxPrice.price, List(head.name, pathMaxPrice.name))
+			}
 		}
 	}
 
