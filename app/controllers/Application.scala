@@ -36,6 +36,9 @@ object Application extends Controller {
 
   def jajascript() = Action { request =>
     println("Body " + request.body)
+    println("Request uri " + request.uri )
+    println("Request accept " + request.accept )
+    println("Request queryString " + request.queryString )
     println("Body as Text " + request.body.asText)
     println("Request " + request)
     println("Request asFormUrlEncoded " + request.body.asFormUrlEncoded)
