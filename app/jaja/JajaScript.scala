@@ -57,29 +57,45 @@ object JajaScript {
 	import jaja.JajaFormats._
 	import jaja.Orders._
 
+	val ClazzJsObject = classOf[JsObject]
+
+	def getDefaultJaja() = Json.toJson(new JajaResult(0, List())).toString
+
 	def optimize(input: Option[String]): String = input match {
-		case None 	=> Json.toJson(new JajaResult(0, List())).toString
+		case None => getDefaultJaja()
 		case Some(planning: String) => {
-			val jsonPlanning: JsValue = Json.parse(planning)
-			val allPaths = jsonPlanning.as[List[JsObject]].map(_.as[Path]).sortBy(_.duration)
+			val allPaths = getJsonPlanning(planning).as[List[JsObject]].map(_.as[Path]).sortBy(_.duration)
+		    val mapPaths: List[(Path, List[Path])] = allPaths.flatMap(p => Map(p -> findPaths(p, allPaths)))
 
-			def findPaths(current: Path, paths: List[Path]): List[Path] = {
-				if (paths.isEmpty) Nil
-		      	else if (paths.head == current) Nil ++ findPaths(current, paths.tail)
-		      	else {
-			        val head = paths.head
-			        if (current.startAt + current.duration <= head.startAt) {
-			          List(head) ++ findPaths(current, paths.tail)
-			        } else Nil ++ findPaths(current, paths.tail)
-		      	}
-		    }
+			Json.toJson(getJajaResult(mapPaths)).toString
+		}
+	}
 
-		    val result: List[(Path, List[Path])] = allPaths.flatMap(p => Map(p -> findPaths(p, allPaths)))
-		    val max = result.filter(!_._2.isEmpty).maxBy(p => p._2.maxBy(_.price))
-		    val pathStart = max._1
-		    val pathMax = max._2.head
+	def getJsonPlanning(planning: String) = {
+		val jsonPlanning = Json.parse(planning)
+		if (jsonPlanning.isInstanceOf[JsObject]) JsArray(List(jsonPlanning))
+		else jsonPlanning
+	}
 
-			Json.toJson(new JajaResult(pathStart.price + pathMax.price, List(pathStart.name, pathMax.name))).toString
+	def findPaths(current: Path, paths: List[Path]): List[Path] = {
+		if (paths.isEmpty) Nil
+	  	else if (paths.head == current) Nil ++ findPaths(current, paths.tail)
+	  	else {
+	        val head = paths.head
+	        if (current.startAt + current.duration <= head.startAt) {
+	          List(head) ++ findPaths(current, paths.tail)
+	        } else Nil ++ findPaths(current, paths.tail)
+	  	}
+	}
+
+	def getJajaResult(mapPaths: List[(Path, List[Path])]): JajaResult = {
+		val head = mapPaths.head._1
+		val pathsWithPrices = mapPaths.filter(!_._2.isEmpty)
+		if (pathsWithPrices.isEmpty) {
+			new JajaResult(head.price, List(head.name))
+		} else {
+			val pathMaxPrice = pathsWithPrices.maxBy(p => p._2.maxBy(_.price))._2.head
+			new JajaResult(head.price + pathMaxPrice.price, List(head.name, pathMaxPrice.name))
 		}
 	}
 

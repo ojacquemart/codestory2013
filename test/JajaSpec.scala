@@ -12,44 +12,6 @@ class JajaSpec extends Specification {
 
   "The JajaSpec" should {
 
-    "receive POST data" in {
-      running(FakeApplication()) {
-        val planning = """[{ "VOL": "MONAD42", "DEPART": 0, "DUREE": 5, "PRIX": 10 },
-                         { "VOL": "META18", "DEPART": 3, "DUREE": 7, "PRIX": 14 },
-                         { "VOL": "LEGACY01", "DEPART": 5, "DUREE": 9, "PRIX": 8 },
-                         { "VOL": "YAGNI17", "DEPART": 5, "DUREE": 9, "PRIX": 7 }]"""
-        val Some(result) = routeAndCall(
-          FakeRequest(
-            POST, 
-            "/jajascript/optimize",
-            FakeHeaders(Map("Content-Type" -> Seq("application/x-www-form-urlencoded"))),
-            planning
-
-        ))
-
-        status(result) must equalTo(201)
-        contentType(result) must beSome("application/json")
-        contentAsString(result) must equalTo("""{"gain":18,"path":["MONAD42","LEGACY01"]}""")
-      }
-    } 
-
-    "receive empty POST data" in {
-      running(FakeApplication()) {
-        val planning = "[]"
-        val Some(result) = routeAndCall(
-          FakeRequest(
-            POST, 
-            "/jajascript/optimize"
-            /*FakeHeaders(Map("Content-Type" -> Seq("application/x-www-form-urlencoded"))), 
-            planning*/
-          ) )
-
-        status(result) must equalTo(201)
-        contentType(result) must beSome("application/json")
-        contentAsString(result) must equalTo("""{"gain":0,"path":[]}""")
-      }
-    }     
-
   	"json writes single path" in {
   		val result = new Path("MONAD42", 0, 5, 10)
   		Json.toJson(result).toString must equalTo("""{"VOL":"MONAD42","DEPART":0,"DUREE":5,"PRIX":10}""")
@@ -79,12 +41,22 @@ class JajaSpec extends Specification {
       JajaScript.optimize(None) must equalTo("""{"gain":0,"path":[]}""")
     }
 
-    "be ok for default case" in {
+    "be ok for enonce case" in {
     	val planning = Some("""[{ "VOL": "MONAD42", "DEPART": 0, "DUREE": 5, "PRIX": 10 },
                          { "VOL": "META18", "DEPART": 3, "DUREE": 7, "PRIX": 14 },
                          { "VOL": "LEGACY01", "DEPART": 5, "DUREE": 9, "PRIX": 8 },
                          { "VOL": "YAGNI17", "DEPART": 5, "DUREE": 9, "PRIX": 7 }]""")
       JajaScript.optimize(planning) must equalTo("""{"gain":18,"path":["MONAD42","LEGACY01"]}""")
+    }
+
+    "be ok with only one way" in {
+      val planning = Some("""{"VOL": "AF514", "DEPART":0, "DUREE":5, "PRIX": 10}""")
+      JajaScript.optimize(planning) mustEqual("""{"gain":10,"path":["AF514"]}""")
+    }
+
+    "be ok with only one way as array" in {
+      val planning = Some("""[{"VOL": "AF514", "DEPART":0, "DUREE":5, "PRIX": 10}]""")
+      JajaScript.optimize(planning) mustEqual("""{"gain":10,"path":["AF514"]}""")
     }
 
   }

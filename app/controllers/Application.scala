@@ -39,20 +39,9 @@ object Application extends Controller {
   }
 
   def jajascript() = Action(parse.tolerantText) { request =>
-    println(request.body)
-    println(request)
     println("Body " + request.body)
-    /*println("Request uri " + request.uri )
-    println("Request accept " + request.accept )
-    println("Request queryString " + request.queryString )
-    println("Body as Text " + request.body.asText)
-    println("Request " + request)
-    println("Request asFormUrlEncoded " + request.body.asFormUrlEncoded)
-    println("Request queryString " + request.queryString)
-    println("Body asJson " + request.body.asJson)
-    println("Headers = " + request.headers)*/
-    Created("Oh shit").as("application/json")
-    //Created(JajaScript.optimize(request.body.asText)).as("application/json")
+    println("Headers = " + request.headers)
+    Created(JajaScript.optimize(Some(request.body))).as("application/json")
   }
 
 }
