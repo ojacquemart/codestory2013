@@ -14,17 +14,39 @@ class JajaSpec extends Specification {
 
     "receive POST data" in {
       running(FakeApplication()) {
-        val json = """{"name": "new name", "description": "new description"}"""
+        val planning = """[{ "VOL": "MONAD42", "DEPART": 0, "DUREE": 5, "PRIX": 10 },
+                         { "VOL": "META18", "DEPART": 3, "DUREE": 7, "PRIX": 14 },
+                         { "VOL": "LEGACY01", "DEPART": 5, "DUREE": 9, "PRIX": 8 },
+                         { "VOL": "YAGNI17", "DEPART": 5, "DUREE": 9, "PRIX": 7 }]"""
         val Some(result) = routeAndCall(
           FakeRequest(
             POST, 
             "/jajascript/optimize",
-            FakeHeaders(Map("Content-Type" -> Seq("application/x-www-form-urlencoded"))), 
-            json
+            FakeHeaders(Map("Content-Type" -> Seq("application/x-www-form-urlencoded"))),
+            planning
+
+        ))
+
+        status(result) must equalTo(201)
+        contentType(result) must beSome("application/json")
+        contentAsString(result) must equalTo("""{"gain":18,"path":["MONAD42","LEGACY01"]}""")
+      }
+    } 
+
+    "receive empty POST data" in {
+      running(FakeApplication()) {
+        val planning = "[]"
+        val Some(result) = routeAndCall(
+          FakeRequest(
+            POST, 
+            "/jajascript/optimize"
+            /*FakeHeaders(Map("Content-Type" -> Seq("application/x-www-form-urlencoded"))), 
+            planning*/
           ) )
 
-        status(result) must equalTo(OK)
+        status(result) must equalTo(201)
         contentType(result) must beSome("application/json")
+        contentAsString(result) must equalTo("""{"gain":0,"path":[]}""")
       }
     }     
 
@@ -53,12 +75,16 @@ class JajaSpec extends Specification {
   		Json.parse(json).as[JajaResult] must equalTo(new JajaResult(18, List("MONAD42", "LEGACY01")))
   	}
 
+    "handle empty input" in {
+      JajaScript.optimize(None) must equalTo("""{"gain":0,"path":[]}""")
+    }
+
     "be ok for default case" in {
-    	val jsonPlanning = Json.parse("""[{ "VOL": "MONAD42", "DEPART": 0, "DUREE": 5, "PRIX": 10 },
+    	val planning = Some("""[{ "VOL": "MONAD42", "DEPART": 0, "DUREE": 5, "PRIX": 10 },
                          { "VOL": "META18", "DEPART": 3, "DUREE": 7, "PRIX": 14 },
                          { "VOL": "LEGACY01", "DEPART": 5, "DUREE": 9, "PRIX": 8 },
-                        { "VOL": "YAGNI17", "DEPART": 5, "DUREE": 9, "PRIX": 7 }]""")
-      JajaScript.optimize(jsonPlanning) must equalTo("""{"gain":18,"path":["MONAD42","LEGACY01"]}""")
+                         { "VOL": "YAGNI17", "DEPART": 5, "DUREE": 9, "PRIX": 7 }]""")
+      JajaScript.optimize(planning) must equalTo("""{"gain":18,"path":["MONAD42","LEGACY01"]}""")
     }
 
   }

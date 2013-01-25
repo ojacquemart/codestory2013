@@ -57,26 +57,30 @@ object JajaScript {
 	import jaja.JajaFormats._
 	import jaja.Orders._
 
-	def optimize(jsonPlanning: JsValue): String = {
-		val allPaths = jsonPlanning.as[List[JsObject]].map(_.as[Path]).sortBy(_.duration)
+	def optimize(input: Option[String]): String = input match {
+		case None 	=> Json.toJson(new JajaResult(0, List())).toString
+		case Some(planning: String) => {
+			val jsonPlanning: JsValue = Json.parse(planning)
+			val allPaths = jsonPlanning.as[List[JsObject]].map(_.as[Path]).sortBy(_.duration)
 
-		def findPaths(current: Path, paths: List[Path]): List[Path] = {
-			if (paths.isEmpty) Nil
-	      	else if (paths.head == current) Nil ++ findPaths(current, paths.tail)
-	      	else {
-		        val head = paths.head
-		        if (current.startAt + current.duration <= head.startAt) {
-		          List(head) ++ findPaths(current, paths.tail)
-		        } else Nil ++ findPaths(current, paths.tail)
-	      	}
-	    }
+			def findPaths(current: Path, paths: List[Path]): List[Path] = {
+				if (paths.isEmpty) Nil
+		      	else if (paths.head == current) Nil ++ findPaths(current, paths.tail)
+		      	else {
+			        val head = paths.head
+			        if (current.startAt + current.duration <= head.startAt) {
+			          List(head) ++ findPaths(current, paths.tail)
+			        } else Nil ++ findPaths(current, paths.tail)
+		      	}
+		    }
 
-	    val result: List[(Path, List[Path])] = allPaths.flatMap(p => Map(p -> findPaths(p, allPaths)))
-	    val max = result.filter(!_._2.isEmpty).maxBy(p => p._2.maxBy(_.price))
-	    val pathStart = max._1
-	    val pathMax = max._2.head
+		    val result: List[(Path, List[Path])] = allPaths.flatMap(p => Map(p -> findPaths(p, allPaths)))
+		    val max = result.filter(!_._2.isEmpty).maxBy(p => p._2.maxBy(_.price))
+		    val pathStart = max._1
+		    val pathMax = max._2.head
 
-		Json.toJson(new JajaResult(pathStart.price + pathMax.price, List(pathStart.name, pathMax.name))).toString
+			Json.toJson(new JajaResult(pathStart.price + pathMax.price, List(pathStart.name, pathMax.name))).toString
+		}
 	}
 
 }
