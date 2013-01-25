@@ -9,11 +9,13 @@ import java.util.*;
 
 import views.html.*;
 
+import jaja.*;
+
 public class SimpleApplication extends Controller {
 
       public static Result javajaja() {
     	System.out.println(request().body());
-        return ok("");
+    	return ok("");
     }
 
 }

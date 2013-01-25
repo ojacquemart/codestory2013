@@ -38,6 +38,7 @@ object Application extends Controller {
     println("Body " + request.body)
     println("Body as Text " + request.body.asText)
     println("Request " + request)
+    println("Request asFormUrlEncoded " + request.body.asFormUrlEncoded)
     println("Request queryString " + request.queryString)
     println("Body asJson " + request.body.asJson)
     println("Headers = " + request.headers)
