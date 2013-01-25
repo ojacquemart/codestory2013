@@ -48,20 +48,15 @@ la forme :
 
 En reprenant l'exemple ci dessus :
 
-	[
-		{ "VOL": "MONAD42", "DEPART": 0, "DUREE": 5, "PRIX": 10 },
-		{ "VOL": "META18", "DEPART": 3, "DUREE": 7, "PRIX": 14 },
-		{ "VOL": "LEGACY01", "DEPART": 5, "DUREE": 9, "PRIX": 8 },
-		{ "VOL": "YAGNI17", "DEPART": 5, "DUREE": 9, "PRIX": 7 }
-	]
+	[{ "VOL": "MONAD42", "DEPART": 0, "DUREE": 5, "PRIX": 10 },{ "VOL": "META18", "DEPART": 3, "DUREE": 7, "PRIX": 14 },{ "VOL": "LEGACY01", "DEPART": 5, "DUREE": 9, "PRIX": 8 },{ "VOL": "YAGNI17", "DEPART": 5, "DUREE": 9, "PRIX": 7 }]
 
-Vous devrez répondre le résultat suivant :
+	Vous devrez répondre le résultat suivant :
 
-	{
-		"gain" : 18,
-		"path" : ["MONAD42","LEGACY01"]
-	}
+		{
+			"gain" : 18,
+			"path" : ["MONAD42","LEGACY01"]
+		}
 
-Le gain représentant la somme optimale, path représentant l'ordre des vols.
+	Le gain représentant la somme optimale, path représentant l'ordre des vols.
 
-Bons calculs !
+	Bons calculs !

@@ -35,10 +35,12 @@ object Application extends Controller {
   }
 
   def jajascript() = Action { request =>
+    println("Body " + request.body)
+    println("Body as Text " + request.body.asText)
+    println("Request " + request)
+    println("Request queryString " + request.queryString)
+    println("Body asJson " + request.body.asJson)
     println("Headers = " + request.headers)
-    println("Body = " + request.body)
-    println(request.body.asText)
-    //println("As objects = " + request.body.as[List[JsObject]].map(_.as[Path]))
     Created(JajaScript.optimize(request.body.asText)).as("application/json")
   }
 
