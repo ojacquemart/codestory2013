@@ -35,6 +35,7 @@ object Question {
 		case "Quelle+est+ton+adresse+email" 				=> "o.jacquemart@gmail.com"
 		case "Est+ce+que+tu+reponds+toujours+oui(OUI/NON)" 	=> "NON"
 		case "As+tu+passe+une+bonne+nuit+malgre+les+bugs+de+l+etape+precedente(PAS_TOP/BOF/QUELS_BUGS)" => "QUELS_BUGS"
+		case "q=As+tu+copie+le+code+de+ndeloof(OUI/NON/JE_SUIS_NICOLAS" => "NON"
 		case _ => "OUI"
 	}
 
