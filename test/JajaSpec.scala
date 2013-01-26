@@ -43,9 +43,9 @@ class JajaSpec extends Specification {
 
     "handle enonce case" in {
     	val planning = Some("""[{ "VOL": "MONAD42", "DEPART": 0, "DUREE": 5, "PRIX": 10 },
-                         { "VOL": "META18", "DEPART": 3, "DUREE": 7, "PRIX": 14 },
-                         { "VOL": "LEGACY01", "DEPART": 5, "DUREE": 9, "PRIX": 8 },
-                         { "VOL": "YAGNI17", "DEPART": 5, "DUREE": 9, "PRIX": 7 }]""")
+                             { "VOL": "META18", "DEPART": 3, "DUREE": 7, "PRIX": 14 },
+                             { "VOL": "LEGACY01", "DEPART": 5, "DUREE": 9, "PRIX": 8 },
+                             { "VOL": "YAGNI17", "DEPART": 5, "DUREE": 9, "PRIX": 7 }]""")
       JajaScript.optimize(planning) must equalTo("""{"gain":18,"path":["MONAD42","LEGACY01"]}""")
     }
 
@@ -59,9 +59,17 @@ class JajaSpec extends Specification {
       JajaScript.optimize(planning) mustEqual("""{"gain":10,"path":["AF514"]}""")
     }
 
-    "handle best prices with same start" in {
-      val planning = Some("""[{"VOL": "AF1", "DEPART":0, "DUREE":1, "PRIX": 5}, {"VOL": "AF2", "DEPART":0, "DUREE":1, "PRIX": 6}]""")
+    "handle best prices with same startAt" in {
+      val planning = Some("""[{"VOL": "AF1", "DEPART":0, "DUREE":1, "PRIX": 5},
+                            {"VOL": "AF2", "DEPART":0, "DUREE":1, "PRIX": 6}]""")
       JajaScript.optimize(planning) mustEqual("""{"gain":6,"path":["AF2"]}""")
+    }
+
+   "handle best prices with same start" in {
+      val planning = Some("""[{"VOL": "AF1", "DEPART":0, "DUREE":1, "PRIX": 2},
+                              {"VOL": "AF2", "DEPART":4, "DUREE":1, "PRIX": 4},
+                              {"VOL": "AF3", "DEPART":2, "DUREE":1, "PRIX": 6} ]""")
+      JajaScript.optimize(planning) mustEqual("""{"gain":12,"path":["AF1","AF3","AF2"]}""")
     }
 
   }
