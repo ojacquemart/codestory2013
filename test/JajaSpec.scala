@@ -65,11 +65,27 @@ class JajaSpec extends Specification {
       JajaScript.optimize(planning) mustEqual("""{"gain":6,"path":["AF2"]}""")
     }
 
-   "handle best prices with same start" in {
+   "handle best prices with no following paths" in {
       val planning = Some("""[{"VOL": "AF1", "DEPART":0, "DUREE":1, "PRIX": 2},
                               {"VOL": "AF2", "DEPART":4, "DUREE":1, "PRIX": 4},
                               {"VOL": "AF3", "DEPART":2, "DUREE":1, "PRIX": 6} ]""")
       JajaScript.optimize(planning) mustEqual("""{"gain":12,"path":["AF1","AF3","AF2"]}""")
+    }  
+
+    "handle best prices with generated data" in {
+      val planning = Some("""[ 
+                          { "VOL": "encouraging-bandstand-90",  "DEPART": 1, "DUREE": 5, "PRIX": 8 }, 
+                          { "VOL": "faithful-raid-94",          "DEPART": 2, "DUREE": 8, "PRIX": 16 },
+                          { "VOL": "huge-numerous-21",          "DEPART": 3, "DUREE": 8, "PRIX": 15 }, 
+                          { "VOL": "spotless-pan-12",           "DEPART": 1, "DUREE": 8, "PRIX": 20 }, 
+                          { "VOL": "immense-gristle-78",        "DEPART": 2, "DUREE": 6, "PRIX": 7 }, 
+                          { "VOL": "dangerous-steamer-17",      "DEPART": 5, "DUREE": 2, "PRIX": 4 },
+                          { "VOL": "cruel-saturn-22",           "DEPART": 7, "DUREE": 7, "PRIX": 14 }, 
+                          { "VOL": "small-oboe-71",             "DEPART": 9, "DUREE": 8, "PRIX": 12 }, 
+                          { "VOL": "victorious-thunder-91",     "DEPART": 8, "DUREE": 12, "PRIX": 1 },
+                          { "VOL": "homely-fumble-60",          "DEPART": 9, "DUREE": 7, "PRIX": 19 }
+                           ]""")
+      JajaScript.optimize(planning) mustEqual("""{"gain":39,"path":["spotless-pan-12","homely-fumble-60"]}""")
     }
 
   }

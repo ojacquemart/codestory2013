@@ -4,7 +4,34 @@ import collection.mutable.ListBuffer
 
 import play.api.libs.json._
 
+case class JajaResult(gain: Int, path: List[String])
+
 case class Path(name: String, startAt: Int, duration: Int, price: Int, var next: Option[Path] = None) {
+
+	def nextPrice(): Int = next match {
+		case None => 0
+		case (Some(p: Path)) => p.price
+	}
+
+	def asJajaResult() = {
+    	var prices = 0
+    	var names: ListBuffer[String] = ListBuffer()
+
+	    def iterNextOptionPath(path: Option[Path]): Unit = {
+	      path match {
+	        case None => {}
+	        case Some(p: Path) => {
+	          prices += p.price
+	          names += p.name
+	          iterNextOptionPath(p.next)
+	        }
+	      }
+	    }
+
+    	iterNextOptionPath(Some(this))
+
+    	new JajaResult(prices, names.toList)
+  }
 
 	override def equals(any: Any) = any match {
 		case other: Path => (name == other.name && startAt == other.startAt)
@@ -18,7 +45,6 @@ object Orders {
   implicit def PathOrdering: Ordering[Path] = Ordering.by(_.price)
 }
 
-case class JajaResult(gain: Int, path: List[String])
 
 // Implicit JsonFormats
 object JajaFormats {
@@ -53,7 +79,6 @@ object JajaFormats {
 	}
 }
 
-
 object JajaScript {
 	
 	import jaja.JajaFormats._
@@ -66,11 +91,11 @@ object JajaScript {
 	def optimize(input: Option[String]): String = input match {
 		case None => getDefaultJaja()
 		case Some(planning: String) => {
-			val allPaths = getJsonPlanning(planning).as[List[JsObject]].map(_.as[Path]).sortBy(_.duration)
+			val allPaths = getJsonPlanning(planning).as[List[JsObject]].map(_.as[Path]).sortBy(_.startAt)
 		    allPaths.foreach(p => p.next = findNextPathByBestPrice(p, allPaths))
 
-		    val result = calculateResult(Some(findPath(allPaths)))
-			Json.toJson(new JajaResult(result._1, result._2)).toString
+		    val maxGain = allPaths.map(_.asJajaResult).maxBy(_.gain)
+			Json.toJson(maxGain).toString
 		}
 	}
 
@@ -82,44 +107,21 @@ object JajaScript {
 
 	def findNextPathByBestPrice(current: Path, paths: List[Path]): Option[Path] = {
 
-    def iter0(current: Path, paths: List[Path]): List[Path] = {
-      paths match {
-        case Nil => Nil
-        case head :: tail => {
-          if (head == current) iter0(current, tail)
-          else if (current.startAt + current.duration <= head.startAt) {
-            List(head) ++ iter0(current, tail)
-          } else iter0(current, tail)
-        }
-      }
-    }
+	    def iter0(current: Path, paths: List[Path]): List[Path] = {
+	      paths match {
+	        case Nil => Nil
+	        case head :: tail => {
+	          if (head == current) iter0(current, tail)
+	          else if (current.startAt + current.duration <= head.startAt) {
+	            List(head) ++ iter0(current, tail)
+	          } else iter0(current, tail)
+	        }	
+	      }
+	    }
 
-    val result: List[Path] = iter0(current, paths)
-    if (result.isEmpty) None
-    else Some(result.maxBy(_.price))
-  }
-
-	def calculateResult(path: Option[Path]): (Int, List[String]) = {
-      var prices = 0
-      var names: ListBuffer[String] = ListBuffer()
-
-      def iterNextOptionPath(path: Option[Path]): Unit = {
-        path match {
-          case None => {}
-          case Some(p: Path) => {
-            prices += p.price
-            names += p.name
-            iterNextOptionPath(p.next)
-          }
-        }
-      }
-      iterNextOptionPath(path)
-
-      (prices, names.toList)
-    }
-
-	def findPath(list: List[Path]): Path = if (list.forall(p => p.next == None)) list.maxBy(_.price) else list.head
-
-	def maxByPrice(list: List[Path]): Option[Path] = if (list.isEmpty) None else Some(list.maxBy(_.price))			
+	    val result: List[Path] = iter0(current, paths)
+	    if (result.isEmpty) None
+	    else Some(result.maxBy(_.price))
+  	}
 
 }
