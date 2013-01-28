@@ -12,6 +12,8 @@ case class Path(name: String, startAt: Int, duration: Int, price: Int, var nexts
 		case None => 0
 		case (Some(p: Path)) => p.price
 	}
+
+	def before(other: Path) = startAt + duration <= other.startAt
 	
 	def totalGain(): Int = price + nexts.map(_.price).sum
   	
@@ -56,17 +58,13 @@ object JajaFormats {
 	implicit object PathFormat extends Format[Path] {
 
 		def reads(json: JsValue): Path =
-			new Path((json \ "VOL").as[String],
-						(json \ "DEPART").as[Int],
-							(json \ "DUREE").as[Int],
-								(json \ "PRIX").as[Int])
+			new Path((json \ "VOL").as[String], (json \ "DEPART").as[Int],
+						(json \ "DUREE").as[Int], (json \ "PRIX").as[Int])
 
 		def writes(path: Path) : JsValue = {
 			JsObject(
-				List("VOL" -> JsString(path.name),
-					"DEPART" -> JsNumber(path.startAt),
-					"DUREE" -> JsNumber(path.duration),
-					"PRIX" -> JsNumber(path.price))
+				List("VOL" -> JsString(path.name), "DEPART" -> JsNumber(path.startAt),
+						"DUREE" -> JsNumber(path.duration), "PRIX" -> JsNumber(path.price))
 			)
 		}
 	}
@@ -98,8 +96,7 @@ object JajaScript {
 			val allPaths = getJsonPlanning(planning).as[List[JsObject]].map(_.as[Path]).sortBy(_.startAt)
 		    allPaths.foreach(p => p.nexts = findPaths(p, allPaths))
 
-		    val maxGain = allPaths.map(_.asJajaResult).maxBy(_.gain)
-			Json.toJson(maxGain).toString
+			Json.toJson(allPaths.map(_.asJajaResult).maxBy(_.gain)).toString
 		}
 	}
 
@@ -109,21 +106,6 @@ object JajaScript {
 		else jsonPlanning
 	}
 
-  	def findPaths(current: Path, paths: List[Path]): List[Path] = {
-
-	    def iter0(current: Path, paths: List[Path]): List[Path] = {
-		    paths match {
-		        case Nil => Nil
-		        case head :: tail => {
-		          if (head == current) iter0(current, tail)
-		          else if (current.startAt + current.duration <= head.startAt) {
-		            List(head) ++ iter0(current, tail)
-		          } else iter0(current, tail)
-		        }
-		  	}
-	    }
-
-    	iter0(current, paths)
-  	}	
+  	def findPaths(current: Path, paths: List[Path]): List[Path] = paths.filterNot(_ == current).filter(current.before(_))
 
 }
