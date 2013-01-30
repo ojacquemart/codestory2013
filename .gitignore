@@ -6,8 +6,6 @@ tmp
 .history
 dist
 /.idea
-/.idea_moduless
-codestory2013.iml
 /*.iml
 /out
 /.idea_modules
