@@ -12,8 +12,8 @@ For instance, take the following 4x4 field with 2 mines (which are represented b
 ....
 
 The same field including the hint numbers described above would look like this:
-*100
 You should write an algorithm that takes an input as follows:
+*100
 2210
 1*10
 1110
@@ -29,34 +29,30 @@ Your program should produce output as follows:
 Each line should contain the field with the "." characters replaced by the number of adjacent mines to that square.
 There must be an empty line between field outputs.
 
+4 4
 *...
 .*..
+....
+....
 
-4 4
-....
 and output:
-....
 2210
 *100
-
-4 4
 1*10
 1110
 
-....
 ### Serveur
 Votre serveur doit répondre aux requêtes http POST de la forme `http://serveur/minesweeper/resolve` avec un payload de la forme :
-
-.*..
-
+4 4
 ....
 *...
+.*..
+....
 
+Vous devrez répondre le résultat suivant au format text:
 2210
 *100
-
 1*10
-Vous devrez répondre le résultat suivant au format text:
 1110
 
 Have fun!
