@@ -49,9 +49,9 @@ object Application extends Controller {
       println("Body " + request.body)
       println("Flat playload" + request.body.split("\n").mkString("|"))
 
-      val result = Minisweeper(request.body).solveAsString
-      println("Minisweeper = %s".format(result))
-      Ok(result).as("application/text")
+      val result = Minisweeper(request.body).solve
+      println("Minisweeper = %s".format(result.mkString("|")))
+      Ok(result.mkString("\n")).as("application/text")
   }
 
 }
