@@ -7,6 +7,5 @@ GET    /                           	controllers.Application.index(q: String)
 POST   /enonce/:id                	controllers.Application.enonce(id: Int)
 GET    /scalaskel/change/:money		controllers.Application.scalaskel(money: Int)
 POST   /jajascript/optimize			controllers.Application.jajascript()
-POST   /jajascript/optimize			controllers.Application.jajascript()
 POST   /minesweeper/resolve			controllers.Application.minesweeper()
 

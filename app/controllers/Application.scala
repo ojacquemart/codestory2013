@@ -5,17 +5,9 @@ import play.api.mvc._
 
 import play.api.libs.json._
 
-import com.codahale.jerkson.Json._
-
-import javax.servlet.http.HttpServletRequest
-
 import query._
 import scalaskel._
 import jaja._
-import jaja.JajaFormats._
-
-import org.apache.commons.io._
-
 
 object Application extends Controller {
 
