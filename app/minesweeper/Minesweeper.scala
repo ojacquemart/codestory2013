@@ -61,3 +61,15 @@ case class Minesweeper(mines: List[List[String]]) {
   }
 
 }
+
+object Minisweeper {
+
+  def apply(payload: String) = {
+    val rows: Array[String] = payload.split("\n")
+    var buffer: ListBuffer[List[String]] = ListBuffer()
+    rows.tail.foreach(r => buffer += r.toList.map(_.toString))
+    println(buffer.toList)
+    new Minesweeper(buffer.toList)
+  }
+
+}
