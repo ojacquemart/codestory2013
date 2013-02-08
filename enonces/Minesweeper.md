@@ -29,34 +29,33 @@ Your program should produce output as follows:
 Each line should contain the field with the "." characters replaced by the number of adjacent mines to that square.
 There must be an empty line between field outputs.
 
+4 4
+
 *...
 .*..
-
-4 4
 ....
+....
+
 and output:
-....
-2210
-*100
-
 4 4
+
+*100
 1*10
 1110
+2210
 
-....
 ### Serveur
 Votre serveur doit répondre aux requêtes http POST de la forme `http://serveur/minesweeper/resolve` avec un payload de la forme :
 
+....
 .*..
-
 ....
 *...
 
-2210
-*100
-
-1*10
 Vous devrez répondre le résultat suivant au format text:
+2210
+1*10
 1110
+*100
 
 Have fun!
