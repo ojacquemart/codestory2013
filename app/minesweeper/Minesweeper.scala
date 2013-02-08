@@ -26,6 +26,8 @@ case class Minesweeper(mines: List[List[String]]) {
     result.toList
   }
 
+  def solveAsString() = solve().mkString("\n")
+
   def isAMine(value: String) = MineSymbol == value
 
   def nbMinesAround(x: Int, y: Int): Int = {

@@ -47,9 +47,9 @@ object Application extends Controller {
   def minesweeper() = Action(parse.text) {
     request =>
       println("Body " + request.body)
-      println("??" + request.body.split("\n").mkString("|"))
+      println("Flat playload" + request.body.split("\n").mkString("|"))
 
-      val result = Minisweeper(request.body).solve
+      val result = Minisweeper(request.body).solveAsString
       println("Minisweeper = %s".format(result))
       Ok(result).as("application/text")
   }
