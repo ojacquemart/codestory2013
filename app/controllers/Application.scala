@@ -47,4 +47,11 @@ object Application extends Controller {
     Created(result).as("application/json")
   }
 
+  def minesweeper() = Action(parse.text) { request =>
+    println("Body " + request.body)
+    println("Headers = " + request.headers)
+
+    Ok("").as("application/text")
+  }
+
 }

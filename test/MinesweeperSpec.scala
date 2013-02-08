@@ -15,6 +15,18 @@ class MinesweeperSpec extends Specification {
 
   "The MinesweeperSpec" should {
 
+    "convert payload to List[List[String]]" in {
+      val rows = """
+                    4 4
+
+      *...
+      ....
+     ...."""
+      println(rows)
+      println("???")
+      println(rows.split("\n").mkString)
+    }
+
     "identify a mine" in {
       mineSweeper.isAMine("*") must be equalTo (true)
     }
@@ -48,10 +60,10 @@ class MinesweeperSpec extends Specification {
 
     "solve minesweeper" in {
       val result = mineSweeper.solve()
-      result(0) must be equalTo("*100")
-      result(1) must be equalTo("2210")
-      result(2) must be equalTo("1*10")
-      result(3) must be equalTo("1110")
+      result(0) must be equalTo ("*100")
+      result(1) must be equalTo ("2210")
+      result(2) must be equalTo ("1*10")
+      result(3) must be equalTo ("1110")
     }
   }
 
