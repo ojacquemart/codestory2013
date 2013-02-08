@@ -42,6 +42,7 @@ object Application extends Controller {
   def minesweeper() = Action(parse.text) { request =>
     println("Body " + request.body)
     println("Headers = " + request.headers)
+    println("??" + request.body.split("\n").mkString)
 
     Ok("").as("application/text")
   }
