@@ -29,6 +29,12 @@ class QueryAnswersSpec extends Specification {
 	  	contentAsString(result) must equalTo("QUELS_BUGS")
 	}
 
+	"respond to /?q=As+tu+copie+le+code+de+ndeloof(OUI/NON/JE_SUIS_NICOLAS)" in {
+	  	val Some(result) = routeAndCall(FakeRequest(GET, "/?q=As+tu+copie+le+code+de+ndeloof(OUI/NON/JE_SUIS_NICOLAS)"))
+		status(result) must equalTo(OK)
+	  	contentAsString(result) must equalTo("NON")
+	}
+
 	"respond to /?q=1+1" in {
 	  	val Some(result) = routeAndCall(FakeRequest(GET, "/?q=1+1"))
 		status(result) must equalTo(OK)

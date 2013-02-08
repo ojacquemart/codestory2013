@@ -7,10 +7,14 @@ import play.api.libs.json._
 
 import com.codahale.jerkson.Json._
 
+import javax.servlet.http.HttpServletRequest
+
 import query._
 import scalaskel._
 import jaja._
 import jaja.JajaFormats._
+
+import org.apache.commons.io._
 
 
 object Application extends Controller {
@@ -30,18 +34,17 @@ object Application extends Controller {
 
   def scalaskel(money: Int) = Action { request =>
     val result = Scalaskel.changeAsJson(money)
-    Logger.info("[money=%d, response=%s".format(money, result))
+    println("[money=%d, response=%s".format(money, result))
     Ok(result).as("application/json")
   }
 
-  def jajascript() = Action { request =>
+  def jajascript() = Action(parse.tolerantText) { request =>
     println("Body " + request.body)
-    println("Body as Text " + request.body.asText)
-    println("Request " + request)
-    println("Request queryString " + request.queryString)
-    println("Body asJson " + request.body.asJson)
     println("Headers = " + request.headers)
-    Created(JajaScript.optimize(request.body.asText)).as("application/json")
+
+    val result = JajaScript.optimize(Some(request.body))
+    println("Jaja = %s".format(result))
+    Created(result).as("application/json")
   }
 
 }

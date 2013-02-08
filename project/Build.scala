@@ -9,7 +9,7 @@ object ApplicationBuild extends Build {
 
     val appDependencies = Seq(
     	"org.codehaus.groovy" % "groovy-all" % "2.0.6",
-        "com.codahale" % "jerkson_2.9.1" % "0.5.0"
+        "commons-io" % "commons-io" % "2.0"
     )
 
     val main = PlayProject(appName, appVersion, appDependencies, mainLang = SCALA).settings(

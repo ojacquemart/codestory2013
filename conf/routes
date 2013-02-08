@@ -4,6 +4,7 @@
 
 # Home page
 GET    /                           	controllers.Application.index(q: String)
+#POST   /jajascript/optimize         controllers.SimpleApplication.javajaja()
 POST   /enonce/:id                	controllers.Application.enonce(id: Int)
 GET    /scalaskel/change/:money		controllers.Application.scalaskel(money: Int)
 POST   /jajascript/optimize			controllers.Application.jajascript()
