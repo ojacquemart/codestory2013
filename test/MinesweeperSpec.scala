@@ -63,6 +63,17 @@ class MinesweeperSpec extends Specification {
       result(2) must be equalTo ("1*10")
       result(3) must be equalTo ("1110")
     }
+
+    "max mines around a position" in {
+      val mines2 = List(
+        List("*", "*", "*"),
+        List("*", ".", "*"),
+        List("*", "*", "*")
+      )
+      val mineSweeper2 = new Minesweeper(mines2)
+      mineSweeper2.nbMinesAround(1, 1) must be equalTo (6)
+    }
+
   }
 
 
