@@ -49,4 +49,12 @@ object Application extends Controller {
       Ok(result.mkString("\n")).as("application/text")
   }
 
+  def diet() = Action(parse.tolerantText) {
+    request =>
+      println("Body " + request.body)
+      println("Headers = " + request.headers)
+
+      Created("").as("application/text")
+  }
+
 }
