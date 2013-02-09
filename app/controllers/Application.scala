@@ -8,7 +8,7 @@ import play.api.libs.json._
 import query._
 import scalaskel._
 import jaja._
-import minesweeper.Minisweeper
+import minesweeper.Minesweeper
 
 object Application extends Controller {
 
@@ -48,8 +48,8 @@ object Application extends Controller {
     request =>
       println("Flat playload: begin: " + request.body.split("\n").mkString("|") + "end")
 
-      val result = Minisweeper(request.body).solve
-      println("Minisweeper = %s".format(result.mkString("|")))
+      val result = Minesweeper(request.body).solve
+      println("Minesweeper = %s".format(result.mkString("|")))
       Ok(result.mkString("\n")).as("application/text")
   }
 

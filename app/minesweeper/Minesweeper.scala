@@ -58,13 +58,13 @@ case class Minesweeper(mines: List[List[String]]) {
 
   // TODO: migrate to play 2.1 and use List#getOrElse.
   def getOrElse[T](x: Int, list: Seq[T]): Option[T] = {
-    if (x < 0 || x >= mines.size) None
+    if (x < 0 || x >= list.size) None
     else Some(list(x))
   }
 
 }
 
-object Minisweeper {
+object Minesweeper {
 
   def apply(payload: String) = {
     val rows: Array[String] = payload.split("\n")
