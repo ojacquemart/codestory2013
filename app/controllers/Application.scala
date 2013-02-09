@@ -19,11 +19,7 @@ object Application extends Controller {
 
   def enonce(id: Int) = Action {
     request =>
-      println("Request " + request)
       println("Body " + request.body)
-      println("Body asJson " + request.body.asJson)
-      println("Headers = " + request.headers)
-      println("Method = " + request.method)
       Created
   }
 
