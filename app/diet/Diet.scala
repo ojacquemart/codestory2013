@@ -1,7 +1,5 @@
 package diet
 
-import collection.mutable.ListBuffer
-
 import play.api.libs.json._
 
 case class Activity(name: String, value: Int) {
@@ -10,33 +8,44 @@ case class Activity(name: String, value: Int) {
 
 case class Diet(activities: List[Activity]) {
 
-  def resolve(): Set[List[String]] = {
-    var solutions: ListBuffer[List[String]] = ListBuffer()
+  def partitionByValue() = {
 
-    activities.foreach({
-      a => {
-        val nexts = getNexts(a)
-        val sizeNexts = nexts.size
-        for (i <- 0 to sizeNexts) {
-          val comb = nexts.takeRight(sizeNexts - i)
-          if (comb.map(_.value).sum + a.value == 0) {
-            val combAndCurrent = comb ++ List(a)
-            solutions += combAndCurrent.map(_.name).sorted
-          }
-        }
-      }
-    })
-
-    solutions.toSet
   }
 
-  def getNexts(activity: Activity) = activities.filterNot(_.name == activity.name)
+  def resolve(): String = {
+    val solution = findSolution()
+    if (solution.isEmpty) """["no solution"]"""
+    else Json.toJson(solution.map(_.name).sorted).toString
+  }
 
-  def resolveAsJson() = {
-    val result = resolve
+  def findSolution(): List[Activity] = {
+    val sortedActivities = activities.sortBy(_.value)
+    val (negatives, positives) = sortedActivities.partition(_.value < 0)
 
-    if (result.isEmpty) Json.toJson(List("no solution"))
-    else Json.toJson(result.head)
+    for (negative <- negatives) {
+      val comb = findCombinationToValue(negative, positives)
+      if (!comb.isEmpty) return comb :+ negative
+    }
+
+    List()
+  }
+
+  def findCombinationToValue(negative: Activity, positives: List[Activity]): List[Activity] = {
+    val absValue: Int = negative.value.abs
+    val lessOrEqualThanNegative = positives.filter(_.value <= absValue)
+    for (a <- lessOrEqualThanNegative) {
+      val others = lessOrEqualThanNegative.filterNot(_.name == a.name)
+      val othersSize = others.size
+      for (i <- 0 to othersSize) {
+        val comb = others.takeRight(othersSize - i) :+ a
+        val combSum = comb.map(_.value).sum
+        if (combSum == absValue) {
+          return comb
+        }
+      }
+    }
+
+    List()
   }
 
 }

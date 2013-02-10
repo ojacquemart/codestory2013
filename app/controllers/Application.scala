@@ -50,9 +50,7 @@ object Application extends Controller {
 
   def diet() = Action(parse.tolerantText) {
     request =>
-      println("Body " + request.body)
-
-      val result = Diet(request.body).resolveAsJson
+      val result = Diet(request.body).resolve
       println("Diet = %s".format(result))
       Created(result).as("application/text")
   }
