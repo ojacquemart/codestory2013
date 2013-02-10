@@ -4,7 +4,9 @@ import collection.mutable.ListBuffer
 
 import play.api.libs.json._
 
-case class Activity(name: String, value: Int)
+case class Activity(name: String, value: Int) {
+  override def toString() = "[name=%s,value=%d]".format(name, value)
+}
 
 case class Diet(activities: List[Activity]) {
 
@@ -49,7 +51,9 @@ object Diet {
 
   def jsonAsActivites(json: String): List[Activity] = {
     val jsObjects: List[JsObject] = Json.parse(json).as[List[JsObject]]
-    jsObjects.map(j => new Activity((j \ "name").as[String], (j \ "value").as[Int]))
+    val map: List[Activity] = jsObjects.map(j => new Activity((j \ "name").as[String], (j \ "value").as[Int]))
+    println(map.mkString("|"))
+    map
   }
 
 }
