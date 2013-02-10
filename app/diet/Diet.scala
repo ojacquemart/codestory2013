@@ -30,26 +30,26 @@ case class Diet(activities: List[Activity]) {
 
   def getNexts(activity: Activity) = activities.filterNot(_.name == activity.name)
 
+  def resolveAsJson() = {
+    val result = resolve
+
+    if (result.isEmpty) Json.toJson(List("no solution"))
+    else Json.toJson(result.head)
+  }
+
 }
 
 
 object Diet {
 
-  def apply(json: String): JsValue = {
-    val result = resolve(json)
-    if (result.isEmpty) Json.toJson(List("no solution"))
-    else Json.toJson(result.head)
-  }
-
-  def resolve(json: String) = {
+  def apply(json: String) = {
     val activities = jsonAsActivites(json)
-    new Diet(activities).resolve
+    new Diet(activities)
   }
 
   def jsonAsActivites(json: String): List[Activity] = {
     val jsObjects: List[JsObject] = Json.parse(json).as[List[JsObject]]
     jsObjects.map(j => new Activity((j \ "name").as[String], (j \ "value").as[Int]))
   }
-
 
 }

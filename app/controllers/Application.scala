@@ -1,14 +1,13 @@
 package controllers
 
-import play._
 import play.api.mvc._
-
-import play.api.libs.json._
 
 import query._
 import scalaskel._
 import jaja._
-import minesweeper.Minesweeper
+import minesweeper._
+import diet._
+import play.api.libs.json.JsValue
 
 object Application extends Controller {
 
@@ -54,7 +53,9 @@ object Application extends Controller {
       println("Body " + request.body)
       println("Headers = " + request.headers)
 
-      Created("").as("application/text")
+      val result = Diet(request.body).resolveAsJson
+      println("Diet = %s".format(result))
+      Created(result).as("application/text")
   }
 
 }

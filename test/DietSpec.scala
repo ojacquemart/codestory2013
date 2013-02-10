@@ -31,7 +31,7 @@ class DietSpec extends Specification {
           { "name" : "guitar-hero", "value" : -181 }
         ]"""
 
-     val result = Diet(json).toString
+     val result = Diet(json).resolveAsJson.toString
       result must be equalTo("""["coca-light","croissant","guitar-hero"]""")
     }
 
@@ -41,7 +41,7 @@ class DietSpec extends Specification {
           { "name" : "croissant", "value" : 180 }
         ]"""
 
-     val result = Diet(json).toString
+     val result = Diet(json).resolveAsJson.toString
       result must be equalTo("""["no solution"]""")
     }
 
