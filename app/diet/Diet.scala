@@ -8,10 +8,6 @@ case class Activity(name: String, value: Int) {
 
 case class Diet(activities: List[Activity]) {
 
-  def partitionByValue() = {
-
-  }
-
   def resolve(): String = {
     val solution = findSolution()
     if (solution.isEmpty) """["no solution"]"""
@@ -32,9 +28,9 @@ case class Diet(activities: List[Activity]) {
 
   def findCombinationToValue(negative: Activity, positives: List[Activity]): List[Activity] = {
     val absValue: Int = negative.value.abs
-    val lessOrEqualThanNegative = positives.filter(_.value <= absValue)
-    for (a <- lessOrEqualThanNegative) {
-      val others = lessOrEqualThanNegative.filterNot(_.name == a.name)
+    val ltOrEqThanNegative = positives.filter(_.value <= absValue)
+    for (a <- ltOrEqThanNegative) {
+      val others = ltOrEqThanNegative.filterNot(_.name == a.name)
       val othersSize = others.size
       for (i <- 0 to othersSize) {
         val comb = others.takeRight(othersSize - i) :+ a
@@ -49,7 +45,6 @@ case class Diet(activities: List[Activity]) {
   }
 
 }
-
 
 object Diet {
 
